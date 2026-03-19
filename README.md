@@ -37,7 +37,7 @@ To minimize load imbalance between two power plants efficiently.
 - 💾 Database (SQLite) for logging performance
 - 📉 Advanced visual analytics
 
-👩‍💻 Author
+##👩‍💻 Author
 
 Sakshi Rawat
 B.Tech CSE | DAA Project
