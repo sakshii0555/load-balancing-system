@@ -7,45 +7,10 @@ This project implements optimal load partitioning between two power plants using
 
 ## 🚀 Features
 
-✨ User Input System
-
-Accepts multiple load values (in MW)
-
-Dynamic input handling
-
-✨ Load Distribution
-
-Automatically divides loads into:
-
-Plant A
-
-Plant B
-
-✨ Capacity Monitoring
-
-Checks if plant exceeds max capacity
-
-Displays:
-
-✅ Safe
-
-⚠️ Warning
-
-🚨 Overloaded
-
-✨ Visualization Dashboard
-
-Bar charts for load comparison
-
-Clean UI with glowing cards
-
-✨ Algorithm Comparison
-
-Steps executed
-
-Execution time
-
-Time & Space complexity
+- Load input system
+- Capacity warning system
+- Real-time comparison
+- Visualization dashboard
 
 ## 🛠 Tech Stack
 
@@ -64,18 +29,13 @@ Time & Space complexity
 
 To minimize load imbalance between two power plants efficiently.
 
-🔮 Future Enhancements
+## 🔮 Future Enhancements
 
-📊 Real-time grid simulation
-
-🧠 Machine Learning-based load prediction
-
-🌐 API integration for live data
-
-💾 Database (SQLite) for logging performance
-
-📉 Advanced visual analytics
-
+- 📊 Real-time grid simulation
+- 🧠 Machine Learning-based load prediction
+- 🌐 API integration for live data
+- 💾 Database (SQLite) for logging performance
+- 📉 Advanced visual analytics
 
 👩‍💻 Author
 
