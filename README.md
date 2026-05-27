@@ -103,23 +103,6 @@ load-balancing-system/
 
 ---
 
-# 📸 Project Screenshots
-
-## 🖥️ Dashboard
-(Add dashboard screenshot here)
-
-## 📊 Performance Benchmark
-(Add benchmark screenshot here)
-
-## 🌐 Finite Automata Visualization
-(Add automata screenshot here)
-
-## 📋 DP Table Visualization
-(Add DP table screenshot here)
-
----
-
-
 # 📊 Expected Output
 
 - Optimal Load Distribution
