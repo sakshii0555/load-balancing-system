@@ -1,10 +1,16 @@
+from cmath import e
+
 import streamlit as st
 import plotly.express as px
 import time
 
+from utils.dp_visualization import render_dp_table
 from ui.styles import apply_styles
 from algorithms.brute_force import brute_force_partition
 from algorithms.dynamic_programming import dp_partition
+from automata import build_automata, graph_to_plotly
+from utils.benchmark import *
+import plotly.express as px
 
 
 # ------------------------------------------------
@@ -12,7 +18,7 @@ from algorithms.dynamic_programming import dp_partition
 # ------------------------------------------------
 
 st.set_page_config(
-    page_title="Power Grid Load Balancing",
+    page_title="Power Grid Load Balancing", 
     layout="wide"
 )
 
@@ -128,7 +134,7 @@ if run_algo and loads_input:
 
     start = time.time()
 
-    subset_dp, steps_dp = dp_partition(loads)
+    subset_dp, steps_dp, dp_table = dp_partition(loads)
 
     runtime_dp = round((time.time() - start) * 1000, 3)
 
@@ -142,12 +148,21 @@ if run_algo and loads_input:
     loadA_dp = sum(plantA_dp)
     loadB_dp = sum(plantB_dp)
 
+    # ------------------------------------------------
+    # CAPACITY CHECK
+    # ------------------------------------------------
+
+    capacity_ok = (
+    loadA_dp <= capacity and
+    loadB_dp <= capacity
+    )
 
     # ----------------------------
     # IMBALANCE
     # ----------------------------
 
-    imbalance = abs(loadA_bf - loadB_bf)
+    imbalance_bf = abs(loadA_bf - loadB_bf)
+    imbalance_dp = abs(loadA_dp - loadB_dp)
 
 
     # ------------------------------------------------
@@ -181,7 +196,10 @@ if run_algo and loads_input:
 
         st.subheader("Brute Force")
 
-        st.plotly_chart(fig_bf, use_container_width=True)
+        st.plotly_chart(
+            fig_bf,
+            use_container_width=True
+        )
 
         st.metric("Plant A Load", f"{loadA_bf} MW")
         st.metric("Plant B Load", f"{loadB_bf} MW")
@@ -189,13 +207,11 @@ if run_algo and loads_input:
         st.write("Plant A Zones:", plantA_bf)
         st.write("Plant B Zones:", plantB_bf)
 
-        st.metric("Imbalance", f"{imbalance} MW")
+        st.metric("Imbalance", f"{imbalance_bf} MW")
         st.metric("Steps", steps_bf)
         st.metric("Time", f"{runtime_bf} ms")
 
         st.markdown('</div>', unsafe_allow_html=True)
-
-
 
     with col2:
 
@@ -203,7 +219,10 @@ if run_algo and loads_input:
 
         st.subheader("Dynamic Programming")
 
-        st.plotly_chart(fig_dp, use_container_width=True)
+        st.plotly_chart(
+            fig_dp,
+            use_container_width=True
+        )
 
         st.metric("Plant A Load", f"{loadA_dp} MW")
         st.metric("Plant B Load", f"{loadB_dp} MW")
@@ -211,48 +230,248 @@ if run_algo and loads_input:
         st.write("Plant A Zones:", plantA_dp)
         st.write("Plant B Zones:", plantB_dp)
 
-        st.metric("Imbalance", f"{imbalance} MW")
+        st.metric("Imbalance", f"{imbalance_dp} MW")
         st.metric("Steps", steps_dp)
         st.metric("Time", f"{runtime_dp} ms")
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-
-
     # ------------------------------------------------
-    # COMPARISON TABLE
+    # CAPACITY STATUS
     # ------------------------------------------------
 
-    st.markdown('<div class="card-box">', unsafe_allow_html=True)
+    if capacity_ok:
 
-    st.subheader("Algorithm Comparison")
+        st.success(
+            f"✅ Capacity Constraint Satisfied "
+            f"(Max Capacity = {capacity} MW)"
+        )
 
-    comparison = {
-        "Metric":[
-            "Time Complexity",
-            "Space Complexity",
-            "Steps Executed",
-            "Execution Time",
-            "Imbalance"
-        ],
+    else:
 
-        "Brute Force":[
-            f"O(2^{len(loads)})",
-            "O(1)",
-            steps_bf,
-            f"{runtime_bf} ms",
-            f"{imbalance} MW"
-        ],
+        st.error(
+            f"⚠ Capacity Constraint Violated "
+            f"(Max Capacity = {capacity} MW)"
+        )
 
-        "Dynamic Programming":[
-            f"O(n × Sum) = O({len(loads)} × {total_load})",
-            f"O(Sum) = O({total_load})",
-            steps_dp,
-            f"{runtime_dp} ms",
-            f"{imbalance} MW"
-        ]
-    }
+    # ------------------------------------------------
+    # WINNER CARD
+    # ------------------------------------------------
 
-    st.table(comparison)
+    if runtime_dp < runtime_bf:
 
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.success(
+            "🏆 Dynamic Programming is Faster"
+        )
+
+    else:
+
+        st.success(
+            "🏆 Brute Force is Faster"
+        )
+
+        # ------------------------------------------------
+        # COMPARISON TABLE
+        # ------------------------------------------------
+
+        st.markdown('<div class="card-box">', unsafe_allow_html=True)
+
+        st.subheader("Algorithm Comparison")
+
+        comparison = {
+            "Metric": [
+                "Time Complexity",
+                "Space Complexity",
+                "Steps Executed",
+                "Execution Time",
+                "Imbalance"
+            ],
+
+            "Brute Force": [
+                f"O(2^{len(loads)})",
+                "O(1)",
+                steps_bf,
+                f"{runtime_bf} ms",
+                f"{imbalance_bf} MW"
+            ],
+
+            "Dynamic Programming": [
+            f"O(n * Sum) = O({len(loads)} * {total_load})",
+                f"O(Sum) = O({total_load})",
+                steps_dp,
+                f"{runtime_dp} ms",
+                f"{imbalance_dp} MW"
+            ]
+        }
+
+        st.dataframe(
+        comparison,
+        use_container_width=True,
+        hide_index=True
+    )
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # ==========================================
+        # FINITE AUTOMATA VISUALIZATION
+        # ==========================================
+
+        st.markdown('<div class="card-box">', unsafe_allow_html=True)
+
+        st.markdown("""
+        <div style="padding-bottom:15px;">
+            <h2 style="color:white;">
+                ⚡ Finite Automaton — Load Selection
+            </h2>
+        </div>
+        """, unsafe_allow_html=True)
+
+        G = build_automata(
+            loads,
+            max_depth=4
+        )
+
+        fig_automata = graph_to_plotly(G)
+
+        st.plotly_chart(
+            fig_automata,
+            use_container_width=True
+        )
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # -------------------------------------
+        # DP TABLE VISUALIZATION
+        # -------------------------------------
+
+        target = total_load // 2
+
+        closest = 0
+
+        for s in range(target, -1, -1):
+
+            if dp_table[-1][s]:
+
+                closest = s
+                break
+
+        render_dp_table(
+            dp_table,
+            loads,
+            target,
+            closest
+        )
+
+        # ------------------------------------------------
+        # PERFORMANCE BENCHMARK
+        # ------------------------------------------------
+
+        st.markdown('<div class="card-box">', unsafe_allow_html=True)
+
+        st.markdown("""
+        <div style="padding-bottom:15px;">
+            <h2 style="color:white;">
+                📈 Performance Benchmark
+            </h2>
+        </div>
+        """, unsafe_allow_html=True)
+
+        df_time, df_ops = generate_benchmark()
+
+        bench_col1, bench_col2 = st.columns(2)
+
+        with bench_col1:
+
+            st.subheader("Execution Time (ms)")
+
+            fig_time = create_time_chart(df_time)
+
+            st.plotly_chart(
+                fig_time,
+                use_container_width=True
+            ) 
+
+        with bench_col2:
+
+            st.subheader("Theoretical Operations")
+
+            fig_ops = create_ops_chart(df_ops)
+
+            st.plotly_chart(
+                fig_ops,
+                use_container_width=True
+            )
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # ------------------------------------------------
+    # COMPLEXITY EXPLANATION
+    # ------------------------------------------------
+
+    st.info(
+    """
+    Brute Force explores every possible subset,
+    resulting in exponential growth O(2ⁿ).
+
+    Dynamic Programming stores intermediate
+    results and avoids repeated computation.
+
+    Time Complexity:
+    • Brute Force → O(2ⁿ)
+
+    • Dynamic Programming → O(n × Sum)
+
+    Space Complexity:
+    • Brute Force → O(1)
+
+    • Dynamic Programming → O(Sum)
+    """
+    )
+
+    # ------------------------------------------------
+    # DOWNLOAD REPORT
+    # ------------------------------------------------
+
+    report = f"""
+    POWER GRID LOAD BALANCING REPORT
+
+    Loads:
+    {loads}
+
+    BRUTE FORCE
+
+    Plant A:
+    {plantA_bf}
+
+    Plant B:
+    {plantB_bf}
+
+    Imbalance:
+    {imbalance_bf}
+
+    DYNAMIC PROGRAMMING
+
+    Plant A:
+    {plantA_dp}
+
+    Plant B:
+    {plantB_dp}
+
+    Imbalance:
+    {imbalance_dp}
+
+    Execution Time
+
+    Brute Force:
+    {runtime_bf} ms
+
+    Dynamic Programming:
+    {runtime_dp} ms
+    """
+
+    st.download_button(
+        label="📄 Download Report",
+        data=report,
+        file_name="load_balancing_report.txt",
+        mime="text/plain"
+    )

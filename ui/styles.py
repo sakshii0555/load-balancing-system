@@ -70,6 +70,16 @@ def apply_styles():
         font-size:15px;
     }
 
+    .algo-card {
+    background: #070b1a;
+    border: 1px solid rgba(251,191,36,0.15);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 10px;
+    box-shadow: 0 0 20px rgba(251,191,36,0.08);
+    }     
+                
+
     /* INPUT CARD */
 
     .card-box{
@@ -117,3 +127,5 @@ def apply_styles():
 
     </style>
     """, unsafe_allow_html=True)
+
+    

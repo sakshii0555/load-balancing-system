@@ -50,4 +50,4 @@ def dp_partition(loads):
 
         i -= 1
 
-    return subset, steps
+    return subset, steps, dp
