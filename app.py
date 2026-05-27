@@ -327,7 +327,7 @@ if run_algo and loads_input:
         """, unsafe_allow_html=True)
 
         G = build_automata(
-            loads,
+            loads, 
             max_depth=4
         )
 
