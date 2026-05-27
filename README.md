@@ -1,47 +1,171 @@
-# ⚡ Power Grid Load Balancing System
+# ⚡ Load Balancing System using DAA
 
-This project implements optimal load partitioning between two power plants using:
+An interactive **Load Balancing System** developed using **Python** and **Streamlit** that demonstrates the practical implementation and comparison of two important **Design and Analysis of Algorithms (DAA)** techniques:
 
-- 🔹 Brute Force Algorithm (O(2^n))
-- 🔹 Dynamic Programming (O(n × Sum))
+- 🔍 Brute Force
+- ⚡ Dynamic Programming
 
-## 🚀 Features
+The system distributes electrical loads between two power plants while minimizing imbalance and comparing algorithmic efficiency.
 
-- Load input system
-- Capacity warning system
-- Real-time comparison
-- Visualization dashboard
+---
 
-## 🛠 Tech Stack
+# 🚀 Features
 
-- Python
-- Streamlit
-- Algorithms (DAA concepts)
+## ✅ Load Distribution System
+- Accepts custom load inputs
+- Distributes loads between two plants
+- Minimizes load imbalance
 
-## 📂 Project Structure
+## ⚡ Brute Force Algorithm
+- Explores all possible subsets
+- Guarantees optimal solution
+- Demonstrates exponential complexity
 
-- app.py → Frontend (Streamlit UI)
-- algorithms/ → Core logic (Brute Force, DP)
-- utils/ → Capacity check
-- ui/ → Styling
+## 🧠 Dynamic Programming Algorithm
+- Uses subset-sum optimization
+- Faster and more scalable
+- Efficient memory-based computation
 
-## 🎯 Objective
+## 📊 Performance Benchmarking
+- Execution Time Comparison
+- Theoretical Operations Comparison
+- Algorithm Efficiency Analysis
 
-To minimize load imbalance between two power plants efficiently.
+## 🌐 Finite Automata Visualization
+- Visual representation of state transitions
+- Demonstrates load inclusion/exclusion logic
 
-## 🔮 Future Enhancements
+## 📋 DP Table Visualization
+- Shows Dynamic Programming state table
+- Helps understand intermediate computations
 
-- 📊 Real-time grid simulation
-- 🧠 Machine Learning-based load prediction
-- 🌐 API integration for live data
-- 💾 Database (SQLite) for logging performance
-- 📉 Advanced visual analytics
+## 📈 Interactive Dashboard
+- Modern Streamlit UI
+- Responsive charts and visualizations
+- Real-time algorithm comparison
 
-##👩‍💻 Author
+## 📄 Report Generation
+- Downloadable project summary report
+- Includes results and metrics
 
-Sakshi Rawat
-B.Tech CSE | DAA Project
+---
 
-## Live Demo
+# 🛠️ Tech Stack
 
-http://localhost:8501/
+| Technology | Purpose |
+|------------|---------|
+| Python | Core Programming |
+| Streamlit | Web Application Framework |
+| Plotly | Interactive Charts |
+| Pandas | Data Handling |
+| NetworkX | Graph & Automata Visualization |
+| NumPy | Numerical Computation |
+
+---
+
+# 🧮 Algorithms Used
+
+## 🔍 Brute Force
+- Generates all possible subsets
+- Time Complexity: **O(2ⁿ)**
+- Space Complexity: **O(1)**
+
+## ⚡ Dynamic Programming
+- Uses subset-sum optimization
+- Time Complexity: **O(n × Sum)**
+- Space Complexity: **O(Sum)**
+
+---
+
+# 📂 Project Structure
+
+```bash
+load-balancing-system/
+│
+├── algorithms/
+│   ├── brute_force.py
+│   └── dynamic_programming.py
+│
+├── ui/
+│   └── styles.py
+│
+├── utils/
+│   ├── benchmark.py
+│   ├── automata.py
+│   ├── benchmark.py
+│   └── dp_visualization.py
+│
+├── app.py
+├── requirements.txt
+├── README.md
+└── architecture.png
+```
+
+---
+
+# 📸 Project Screenshots
+
+## 🖥️ Dashboard
+(Add dashboard screenshot here)
+
+## 📊 Performance Benchmark
+(Add benchmark screenshot here)
+
+## 🌐 Finite Automata Visualization
+(Add automata screenshot here)
+
+## 📋 DP Table Visualization
+(Add DP table screenshot here)
+
+---
+
+
+# 📊 Expected Output
+
+- Optimal Load Distribution
+- Minimum Imbalance
+- Execution Time Comparison
+- Benchmark Graphs
+- DP Table Visualization
+- Finite Automata Visualization
+
+---
+
+# 👩‍💻 Author
+
+| Sakshi Rawat | 
+
+---
+
+# 🎯 Learning Outcomes
+
+This project demonstrates:
+
+- Practical implementation of DAA concepts
+- Algorithm optimization techniques
+- Time and space complexity analysis
+- Visualization of computational processes
+- Real-world application of Dynamic Programming
+
+---
+
+# 🔮 Future Improvements
+
+- Multi-plant load balancing
+- AI-based load prediction
+- Real-time energy monitoring
+- Cloud deployment
+- Database integration
+- Live analytics dashboard
+
+---
+
+# 📜 License
+
+This project is developed for educational and academic purposes.
+
+---
+
+# ⭐ GitHub Repository
+
+🔗 https://github.com/sakshii0555/load-balancing-system
